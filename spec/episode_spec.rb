@@ -23,7 +23,7 @@ describe Episode do
           "length" => 1234,
           "metadata" => {
             "title" => "GST023 - Rikeripsum",
-            "subtitle" => "Rikeripsum",
+            "subtitle" => "Rikeripsum Subtitle",
             "summary" => "summary"
           },
           "output_files" => [
@@ -38,7 +38,8 @@ describe Episode do
 
       episode = Episode.from_auphonic podcast, production
       episode.number.should == 23
-      episode.name.should == "Rikeripsum"
+      episode.name.should == "GST023 - Rikeripsum"
+      episode.subtitle.should == "Rikeripsum Subtitle"
       episode.length.should == 1234
       episode.auphonic_uuid.should == "id"
       episode.published_at.should == now
@@ -49,24 +50,13 @@ describe Episode do
     end
   end
 
-
-  it "should have a handle" do
-    podcast = double("podcast")
-    podcast.stub(:handle).and_return("GST")
-    subject.podcast = podcast
-
-    subject.number = 42
-
-    subject.handle.should == "GST042"
-  end
-
   it "should have a title" do
     podcast = double("podcast")
     podcast.stub(:handle).and_return("GST")
     subject.podcast = podcast
 
     subject.number = 1
-    subject.name = "Episodename"
+    subject.name = "GST001 - Episodename"
 
     subject.title.should == "GST001 - Episodename"
   end

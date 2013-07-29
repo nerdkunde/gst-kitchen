@@ -1,4 +1,4 @@
-class Episode < Struct.new(:number, :name, :length, :media, :auphonic_uuid, :published_at, :summary, :chapters)
+class Episode < Struct.new(:number, :name, :subtitle, :length, :media, :auphonic_uuid, :published_at, :summary, :chapters)
   include Comparable
 
   attr_accessor :podcast
@@ -8,14 +8,15 @@ class Episode < Struct.new(:number, :name, :length, :media, :auphonic_uuid, :pub
       metadata = extract_episode_data_from_auphonic(podcast, production)
 
       episode = self.new podcast
-      episode.number = metadata[:number]
-      episode.name   = metadata[:name]
-      episode.length = metadata[:length].round
+      episode.number        = metadata[:number]
+      episode.name          = metadata[:name]
+      episode.subtitle      = metadata[:subtitle]
+      episode.length        = metadata[:length].round
       episode.auphonic_uuid = metadata[:auphonic_uuid]
-      episode.published_at = Time.now
-      episode.summary = metadata[:summary]
-      episode.media = metadata[:media]
-      episode.chapters = metadata[:chapters]
+      episode.published_at  = Time.now
+      episode.summary       = metadata[:summary]
+      episode.media         = metadata[:media]
+      episode.chapters      = metadata[:chapters]
 
       episode
     end
@@ -37,7 +38,8 @@ class Episode < Struct.new(:number, :name, :length, :media, :auphonic_uuid, :pub
         auphonic_uuid: data["data"]["uuid"],
         number: extract_episode_number(podcast.handle, data["data"]["metadata"]["title"]),
         length: data["data"]["length"],
-        name: data["data"]["metadata"]["subtitle"].strip,
+        name: data["data"]["metadata"]["title"].strip,
+        subtitle: data["data"]["metadata"]["subtitle"].strip,
         summary: data["data"]["metadata"]["summary"].strip,
       }
 
@@ -69,11 +71,7 @@ class Episode < Struct.new(:number, :name, :length, :media, :auphonic_uuid, :pub
   end
 
   def title
-    "#{handle} - #{name}"
-  end
-
-  def handle
-    "#{podcast.handle}#{"%03i" % self.number}"
+    name
   end
 
   def rfc_2822_date
