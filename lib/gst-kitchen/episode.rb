@@ -31,6 +31,10 @@ class Episode < Struct.new(:number, :name, :subtitle, :length, :media, :auphonic
       title.match(/#{handle}(\d{3})/) { |match| match[1].to_i }
     end
 
+    def extract_name(handle, title)
+      title.match(/#{handle}\d{3} ?- ?(.*)$/) { |match| match[1] }
+    end
+
     def extract_episode_data_from_auphonic(podcast, production)
       data = production.meta
 
