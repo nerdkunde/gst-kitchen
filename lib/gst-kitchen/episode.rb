@@ -93,5 +93,9 @@ class Episode < Struct.new(:number, :name, :subtitle, :length, :media, :auphonic
   def to_s
     "#{title} (#{duration}) https://auphonic.com/engine/status/#{auphonic_uuid}"
   end
+
+  def to_yaml_properties
+    super - [:@podcast]
+  end
 end
 
