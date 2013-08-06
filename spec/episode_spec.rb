@@ -50,16 +50,6 @@ describe Episode do
     end
   end
 
-  it "should have a title" do
-    podcast = double("podcast")
-    podcast.stub(:handle).and_return("GST")
-    subject.podcast = podcast
-
-    subject.number = 1
-    subject.name = "GST001 - Episodename"
-
-    subject.title.should == "GST001 - Episodename"
-  end
 
   it "should have a handle" do
     podcast = double("podcast")
@@ -69,6 +59,17 @@ describe Episode do
     subject.number = 42
 
     subject.handle.should == "GST042"
+  end
+
+  it "should have a title" do
+    podcast = double("podcast")
+    podcast.stub(:handle).and_return("GST")
+    subject.podcast = podcast
+
+    subject.number = 1
+    subject.name = "GST001 - Episodename"
+
+    subject.title.should == "GST001 - Episodename"
   end
 
   it "should have a RFC2822 date" do

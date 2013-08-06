@@ -79,7 +79,7 @@ class Episode < Struct.new(:number, :name, :subtitle, :length, :media, :auphonic
   end
 
   def handle
-   "#{podcast.handle}#{"%03i" % self.number}"
+    "#{podcast.handle}#{"%03i" % self.number}"
   end
 
   def rfc_2822_date
