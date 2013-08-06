@@ -1,3 +1,5 @@
+require 'sanitize'
+
 class Episode < Struct.new(:number, :name, :subtitle, :length, :media, :auphonic_uuid, :published_at, :summary, :chapters)
   include Comparable
 
@@ -84,6 +86,10 @@ class Episode < Struct.new(:number, :name, :subtitle, :length, :media, :auphonic
 
   def rfc_2822_date
     self.published_at.rfc2822
+  end
+
+  def flattr_auto_submit_link
+    Flattr.auto_submit_link(podcast, podcast.deep_link_url(self), self.name, self.subtitle)
   end
 
   def duration
