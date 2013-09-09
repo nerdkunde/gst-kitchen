@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:psc="http://podlove.org/simple-chapters" version="2.0">
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:psc="http://podlove.org/simple-chapters"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"  version="2.0">
     <channel>
         <title><%= @podcast.title %></title>
         <link><%= @podcast.website %></link>
@@ -42,8 +45,9 @@
           <guid isPermaLink="false"><%= episode.handle %></guid>
           <pubDate><%= episode.rfc_2822_date %></pubDate>
           <itunes:duration><%= episode.duration %></itunes:duration>
-          <itunes:summary><![CDATA[<%= episode.summary %>]]></itunes:summary>
-          <description><![CDATA[<%= episode.summary %>]]></description>
+          <itunes:summary><![CDATA[<%= episode.subtitle %>]]></itunes:summary>
+          <description><![CDATA[<%= episode.subtitle %>]]></description>
+          <content:encoded><![CDATA[<%= episode.summary %>]]></content:encoded>
           <atom:link rel="http://podlove.org/deep-link" href="<%= @podcast.deep_link_url(episode) %>" />
           <atom:link rel="payment" href="<%= episode.flattr_auto_submit_link%>" />
 
