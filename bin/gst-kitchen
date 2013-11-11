@@ -50,14 +50,26 @@ when "stats"
     exit
   end
   downloads = {}
+
+  earliest_date = nil
+  last_date = nil
+
   while (logline = STDIN.gets)
     # 93.194.154.91 - - [13/Dec/2012:16:22:38 +0100] "GET /episodes/gst000.m4a HTTP/1.1" 200 18676513 "-" "iTunes/11.0 (Macintosh; OS X 10.8.2) AppleWebKit/536.26.14"
 
     next unless log_line_match = / - - \[(.*?)\].*?(#{podcast.handle.downcase}\d{3}\..*?) .*?2\d\d (\d+) /.match(logline)
 
-    _date = log_line_match[1]
+    _date = Date.parse(log_line_match[1])
     filename = log_line_match[2]
     size = log_line_match[3]
+
+    if earliest_date.nil? || _date < earliest_date
+      earliest_date = _date
+    end
+
+    if last_date.nil? || _date > last_date
+      last_date = _date
+    end
 
     handle, format = filename.split(".")
 
@@ -79,8 +91,8 @@ when "stats"
     episode.each do |format, stats|
       downloads[handle][format][:count] = stats[:downloaded].to_f / stats[:size]
       total_downloads[handle] ||= {}
-      total_downloads[handle]["total_downloads"] ||= 0
-      total_downloads[handle]["total_downloads"] += downloads[handle][format][:count]
+      total_downloads[handle][:total_downloads] ||= 0
+      total_downloads[handle][:total_downloads] += downloads[handle][format][:count]
     end
   end
 
@@ -88,7 +100,11 @@ when "stats"
     downloads[handle].merge!(total_downloads[handle])
   end
 
-  puts downloads.to_yaml
+  puts "Zeitraum: #{earliest_date} - #{last_date}"
+  downloads.keys.sort.each do |handle|
+    puts podcast.episode_by_handle(handle).title
+    puts downloads[handle][:total_downloads].to_i
+  end
 else
   Trollop::die "unknown subcommand #{subcmd.inspect}"
 end
