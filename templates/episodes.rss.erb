@@ -10,7 +10,9 @@
         <% @podcast.other_formats(@format).each do |format| %>
         <atom:link rel="alternate" href="<%= @podcast.feed_url(format) %>" type="application/rss+xml" title="<%= format.file_ext.upcase %> Audio"/>
         <% end %>
-        <atom:link rel="payment" href="<%= @podcast.flattr_auto_submit_link%>" />
+        <% if @podcast.flattr_auto_submit_link %>
+          <atom:link rel="payment" href="<%= @podcast.flattr_auto_submit_link%>" />
+        <% end %>
         <language><%= @podcast.language %></language>
         <generator>gst-kitchen</generator>
         <copyright><%= @podcast.author %>, cc-by-nc-sa</copyright>
@@ -49,7 +51,9 @@
           <description><![CDATA[<%= episode.subtitle %>]]></description>
           <content:encoded><![CDATA[<%= episode.summary %>]]></content:encoded>
           <atom:link rel="http://podlove.org/deep-link" href="<%= @podcast.deep_link_url(episode) %>" />
-          <atom:link rel="payment" href="<%= episode.flattr_auto_submit_link%>" />
+          <% if episode.flattr_auto_submit_link %>
+            <atom:link rel="payment" href="<%= episode.flattr_auto_submit_link%>" />
+          <% end %>
 
           <% unless episode.chapters.nil? %>
           <psc:chapters>

@@ -1,5 +1,7 @@
 module Flattr
   def Flattr.auto_submit_link(podcast, url, title, description)
+    return nil unless podcast.flattr
+
     "https://flattr.com/submit/auto" +
     "?user_id=#{podcast.flattr["user_id"]}" +
     "&amp;url=#{CGI.escape url}" +
